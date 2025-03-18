@@ -1,4 +1,8 @@
-# MTSNet
+# MTS Layers
+Multiscale Tensor Summation (MTS) Factorization is a novel neural network operator that realizes tensor summation through multiple scales via Tucker decomposition-like mode products. Distinct from other tensor decomposition methods in the literature that mainly focus on network compression, MTS Layers can serve as a novel backbone neural layer alternative to current ones such as MLP, CNN, etc. 
+
+![MTS Layer (1)](https://github.com/user-attachments/assets/f7181efd-055d-48a4-ad11-29761f84103f)
+
 ## Linear Operators in machine learning
 Any linear system can be represented in matrix-vector form given by:
 
