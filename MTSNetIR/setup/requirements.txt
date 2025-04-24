@@ -1,0 +1,12 @@
+opencv-python-headless 
+scikit-image
+scipy
+lpips
+h5py
+PyYAML
+lmdb
+natsort
+tensorboard
+einops
+matplotlib
+wheel

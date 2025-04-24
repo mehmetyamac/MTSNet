@@ -1,0 +1,67 @@
+# general settings
+name: mtsnet_deraining_test
+model_type: ImageCleanModel
+scale: 1
+num_gpu: 1  # set num_gpu: 0 for cpu mode
+manual_seed: 10
+
+# dataset and data loader settings
+datasets:
+
+  test:
+    name: mtsnet_test
+    type: PairedImageDataset
+    in_ch: 3  ## RGB image
+    dataroot_gt: ./datasets/Rain13K/test/Test100/target
+    dataroot_lq: ./datasets/Rain13K/test/Test100/input
+    io_backend:
+      type: disk
+    
+    num_worker_per_gpu: 2
+    
+# network structures
+network_g:
+  type: TinyTensorNet
+  L: 6
+  N: 48
+  T: 3 
+
+
+
+# path to pretrained model
+path:
+  pretrain_network_g: ~ 
+  strict_load_g: true
+  resume_state: ~
+
+
+# this part is required to be defined if you want to run test using basicsr 
+# as mixing_augs are part of image_clean_model.py
+train:
+  mixing_augs:
+    mixup: false
+    mixup_beta: 0
+    use_identity: true
+
+
+# validation settings
+val:
+  save_img: true
+  grids: false
+
+
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: true
+    ssim:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: true
+
+
+# dist training settings
+dist_params:
+  backend: nccl
+  port: 29500

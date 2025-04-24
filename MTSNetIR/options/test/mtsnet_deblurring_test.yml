@@ -1,0 +1,83 @@
+# general settings
+name: mtsnet_deblurring_test
+model_type: ImageCleanModel
+scale: 1
+num_gpu: 1  # set num_gpu: 0 for cpu mode
+manual_seed: 10
+
+# dataset and data loader settings
+datasets:
+
+  test:
+    name: mtsnet_test
+    type: PairedImageDataset
+   
+    dataroot_gt: ./datasets/GoPro/test/target.lmdb
+    dataroot_lq: ./datasets/GoPro/test/input.lmdb
+    io_backend:
+      type: lmdb
+    
+    num_worker_per_gpu: 2
+    
+# network structures
+network_g:
+  type: MTSNet
+  L: 4
+  N: 56
+  T: 3
+  embed_dim: 9
+  embed_style: Hybrid
+  NB: 6 
+  window_scales: [8, 16, 32, 64]
+  ffn_expansion_factor: 2.2
+  FFactivation: null
+  alpha: 1
+  beta: 1
+  alpha_decay: !!float 1e-1
+  beta_decay: !!float 1e-1
+  groups: 4
+  bias: False
+  post_mts_function: MHG
+  em_window_scales: [8, 16, 32, 64]
+  num_heads: 4
+  dwconv_usage: true
+  drop_block_p: 0.
+
+
+# path to pretrained model
+path:
+  pretrain_network_g: ~ 
+  strict_load_g: true
+  resume_state: ~
+
+
+# this part is required to be defined if you want to run test using basicsr 
+# as mixing_augs are part of image_clean_model.py
+train:
+  mixing_augs:
+    mixup: false
+    mixup_beta: 0
+    use_identity: true
+
+
+# validation settings
+val:
+  save_img: true
+  grids: false
+
+
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: false
+    ssim:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: false
+
+
+# dist training settings
+dist_params:
+  backend: nccl
+  port: 29500
